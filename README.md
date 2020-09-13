@@ -27,15 +27,15 @@
 
 **Технологии**
 
--[x] HTML
--[x] CSS
--[x] JavaScript
-  -[x] ООП
--[x] Webpack
--[x] Работа с API
--[x] React
-  -[x] Хуки
-  -[x] Yarn
+- [x] HTML
+- [x] CSS
+- [x] JavaScript
+  - [x] ООП
+- [x] Webpack
+- [x] Работа с API
+- [x] React
+  - [x] Хуки
+  - [x] Yarn
 
 **Ветки**
 
