@@ -12,8 +12,8 @@
 
 **GithubPages**
 
-* [Ссылка на страницу](https://sh4n-oldone.github.io/mesto/)
-* [Ссылка на репозиторий](https://github.com/Sh4n-Oldone/mesto)
+* [Ссылка на страницу](https://sh4n-oldone.github.io/mesto-react/)
+* [Ссылка на репозиторий](https://github.com/Sh4n-Oldone/mesto-react)
 
 **Figma**
 

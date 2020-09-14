@@ -1,5 +1,4 @@
 import React from 'react';
-import '../index.css';
 import Header from './Header.js';
 import Main from './Main.js';
 import Footer from './Footer.js';
@@ -11,9 +10,10 @@ export default function App() {
   const [state, setState] = React.useState({
     isEditProfilePopupOpen: false,
     isAddPlacePopupOpen: false,
-    isEditAvatarPopupOpen: false
+    isEditAvatarPopupOpen: false,
+    isRemoveCardPopupOpen: false
   })
-  const [selectedCard, setSelectedCard] = React.useState(false)
+  const [selectedCard, setSelectedCard] = React.useState('')
 
   function handleCardClick(card) {
     setSelectedCard(card);
@@ -30,13 +30,18 @@ export default function App() {
   function handleEditAvatarClick() {
     setState({...state, isEditAvatarPopupOpen: !state.isEditAvatarPopupOpen})
   }
+  function handleRemoveCardClick() {
+    setState({...state, isRemoveCardPopupOpen: !state.isRemoveCardPopupOpen})
+  }
 
   function closeAllPopups() {
     document.querySelector('.popup_opened').classList.remove('popup_opened');
     setState({...state, isEditProfilePopupOpen: false,
       isAddPlacePopupOpen: false,
-      isEditAvatarPopupOpen: false});
+      isEditAvatarPopupOpen: false,
+      isRemoveCardPopupOpen: false});
     setSelectedCard('')
+
   }
 
   return (
@@ -51,18 +56,20 @@ export default function App() {
             onAddPlace={handleAddPlaceClick}
             onEditAvatar={handleEditAvatarClick}
             onCardClick={handleCardClick}
+            onRemoveClick={handleRemoveCardClick}
           />
 
           <PopupWithForm
             name={'profile'}
             title={'Редактировать профиль'}
             isOpen={state.isEditProfilePopupOpen}
-            onClose={closeAllPopups}>
+            onClose={closeAllPopups}
+          >
             <small className='popup__input_type_error input_name_error-message'/>
-            <input type='text' name='name' value='Жак-Ив Кусто' placeholder='Ваше имя'
+            <input type='text' name='name' defaultValue={'Жак-Ив Кусто'} placeholder='Ваше имя'
                    className='popup__input popup__input_name' minLength='2' maxLength='40' required/>
             <small className='popup__input_type_error input_title_error-message'/>
-            <input type='text' name='job' value='Исследователь океана' placeholder='Ваша работа'
+            <input type='text' name='job' defaultValue={'Исследователь океана'} placeholder='Ваша работа'
                    className='popup__input popup__input_title' minLength='2' maxLength='200' required/>
           </PopupWithForm>
 
@@ -70,34 +77,39 @@ export default function App() {
             name={'card'}
             title={'Новое место'}
             isOpen={state.isAddPlacePopupOpen}
-            onClose={closeAllPopups}>
+            onClose={closeAllPopups}
+          >
             <small className='popup__input_type_error input_name_error-message'/>
-            <input type='text' name='name' value='' placeholder='Название' className='popup__input popup__input_name'
+            <input type='text' name='name' defaultValue={''} placeholder='Название' className='popup__input popup__input_name'
                    minLength='1' maxLength='30' required/>
             <small className='popup__input_type_error input_title_error-message'/>
-            <input type='url' name='link' value='' placeholder='Ссылка на карточку'
+            <input type='url' name='link' defaultValue={''} placeholder='Ссылка на карточку'
                    className='popup__input popup__input_title' required/>
           </PopupWithForm>
 
           <PopupWithForm
             name={'submit'}
             title={'Вы уверены?'}
-            onClose={closeAllPopups}/>
+            isOpen={state.isRemoveCardPopupOpen}
+            onClose={closeAllPopups}
+          />
 
           <PopupWithForm
             name={'avatar'}
             title={'Новый аватар'}
             isOpen={state.isEditAvatarPopupOpen}
-            onClose={closeAllPopups}>
+            onClose={closeAllPopups}
+          >
             <small className='popup__input_type_error input_title_error-message'/>
-            <input type='url' name='avatar' value='' placeholder='Ссылка на аватар'
+            <input type='url' name='avatar' defaultValue={''} placeholder='Ссылка на аватар'
                    className='popup__input popup__input_title' required/>
           </PopupWithForm>
 
           <ImagePopup
             card={selectedCard}
             name={'image'}
-            onClose={closeAllPopups}>
+            onClose={closeAllPopups}
+          >
           </ImagePopup>
 
           <Footer/>

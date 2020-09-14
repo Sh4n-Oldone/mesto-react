@@ -1,8 +1,7 @@
 import React from 'react';
-import '../index.css';
 import avatar from '../images/cousteau.jpg';
 import avatarPointer from '../images/edit-profile-icon.svg';
-import myApi from '../utils/Api';
+import myApi from '../utils/api';
 import Card from '../components/Card.js';
 
 export default function Main(props) {
@@ -46,9 +45,15 @@ export default function Main(props) {
     <main className='content'>
       <section className='profile'>
         <div className='profile__overlay'>
-          <img src={userAvatar} alt={`Фото: ${username}`} className='profile__pic'
-               onClick={props.onEditAvatar}/>
-          <img src={avatarPointer} alt='edit-icon' className='profile__edit-icon'/>
+          <img src={userAvatar}
+               alt={`Фото: ${username}`}
+               className='profile__pic'
+               onClick={props.onEditAvatar}
+          />
+          <img src={avatarPointer}
+               alt='edit-icon'
+               className='profile__edit-icon'
+          />
         </div>
         <div className='profile__info'>
           <div className='profile__wrapper'>
@@ -62,7 +67,12 @@ export default function Main(props) {
 
       <section className='cards'>
         <ul className='cards__list'>
-          {cards.map(card => <Card {...card} key={card.id} onCardClick={props.onCardClick} />)}
+          {cards.map(card =>
+            <Card {...card}
+                  key={card.id}
+                  onCardClick={props.onCardClick}
+                  onRemoveClick={props.onRemoveClick}
+            />)}
         </ul>
       </section>
 

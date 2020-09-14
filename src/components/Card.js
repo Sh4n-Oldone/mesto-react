@@ -1,21 +1,23 @@
 import React from 'react';
+import {owner} from "../utils/utils";
 
-const Card = (card) => {
+const Card = ({url, description, likes, ownerId, onCardClick, onRemoveClick}) => {
 
   function handleClick() {
-    card.onCardClick(card);
+    onCardClick({url, description});
   }
 
-  if(card.ownerId === 'ed99dd7809a559eac419471a') {
+
+  if(ownerId === owner) {
     return (
       <li className='card'>
-        <button className='card__remove-button button-style__reset'/>
-        <img className='card__image' src={card.url} alt={card.description} onClick={handleClick} />
+        <button className='card__remove-button button-style__reset' onClick={onRemoveClick}/>
+        <img className='card__image' src={url} alt={description} onClick={handleClick} />
         <div className='card__item'>
-          <h3 className='card__title'>{card.description}</h3>
+          <h3 className='card__title'>{description}</h3>
           <div className='card__like-container'>
             <button className='card__like-button button-style__reset'/>
-            <p className='card__like-counter'>{card.likes.length}</p>
+            <p className='card__like-counter'>{likes.length}</p>
           </div>
         </div>
       </li>
@@ -23,12 +25,12 @@ const Card = (card) => {
   } else {
     return (
       <li className='card'>
-        <img className='card__image' src={card.url} alt={card.description} onClick={handleClick} />
+        <img className='card__image' src={url} alt={description} onClick={handleClick} />
         <div className='card__item'>
-          <h3 className='card__title'>{card.description}</h3>
+          <h3 className='card__title'>{description}</h3>
           <div className='card__like-container'>
             <button className='card__like-button button-style__reset'/>
-            <p className='card__like-counter'>{card.likes.length}</p>
+            <p className='card__like-counter'>{likes.length}</p>
           </div>
         </div>
       </li>
