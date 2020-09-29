@@ -1,9 +1,9 @@
 import React from 'react';
 
-export default function ImagePopup(props) {
+export default function ImagePopup({card, name, onClose}) {
 
   function isOpen() {
-    if (props.card) {
+    if (card) {
       return ' popup_opened'
     } else {
       return ''
@@ -11,11 +11,11 @@ export default function ImagePopup(props) {
   }
 
   return (
-    <section className={`popup popup-${props.name}${isOpen()}`}>
+    <section className={`popup popup-${name}${isOpen()}`}>
       <div className='popup-image__container'>
-        <img src={props.card.url} alt={props.card.description} className='popup-image__image'/>
-        <p className='popup-image__title'>{props.card.description}</p>
-        <button type='button' className='popup__close-button button-style__reset' onClick={props.onClose}/>
+        <img src={card.url} alt={card.description} className='popup-image__image'/>
+        <p className='popup-image__title'>{card.description}</p>
+        <button type='button' className='popup__close-button button-style__reset' onClick={onClose}/>
       </div>
     </section>
   )

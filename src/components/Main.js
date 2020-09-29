@@ -1,81 +1,57 @@
 import React from 'react';
-import avatar from '../images/cousteau.jpg';
 import avatarPointer from '../images/edit-profile-icon.svg';
-import myApi from '../utils/api';
 import Card from '../components/Card.js';
+import CurrentUserContext from "../context/CurrentUserContext";
+import CardsContext from "../context/CardsContext";
 
-export default function Main(props) {
-
-  const [username, setUsername] = React.useState({userName: 'Жак-Ив Кусто'});
-  const [userDescription, setUserDescription] = React.useState({userDescription: 'Исследователь океана'});
-  const [userAvatar, setUserAvatar] = React.useState({userAvatar: avatar});
-  const [cards, setCards] = React.useState([]);
-
-  React.useEffect(() => {
-    myApi.getUserData().then((res) => {
-      setUsername(res.name)
-      setUserDescription(res.about)
-      setUserAvatar(res.avatar)
-    }).catch((error) => {
-      console.log('Я получал данные. Я сломался. Ошибка: ' + error)
-    });
-  }, []);
-
-  React.useEffect(() => {
-    myApi.getCardsData()
-      .then(res => {
-
-        const cardItems = res.map(item => ({
-          url: item.link,
-          description: item.name,
-          likes: item.likes,
-          id: item._id,
-          ownerId: item.owner._id
-        }));
-
-        setCards(cardItems);
-      })
-      .catch((error) => {
-        console.log('Я грузил данные карточек. Я сломался. Ошибка: ' + error)
-      })
-  }, []);
+export default function Main({onEditAvatar, onEditProfile, onAddPlace, onCardClick, onRemoveClickPopup, onLikeClick, onDeleteClick}) {
 
   return (
 
     <main className='content'>
-      <section className='profile'>
-        <div className='profile__overlay'>
-          <img src={userAvatar}
-               alt={`Фото: ${username}`}
-               className='profile__pic'
-               onClick={props.onEditAvatar}
-          />
-          <img src={avatarPointer}
-               alt='edit-icon'
-               className='profile__edit-icon'
-          />
-        </div>
-        <div className='profile__info'>
-          <div className='profile__wrapper'>
-            <h1 className='profile__name'>{`${username}`}</h1>
-            <button className='profile__edit-button button-style__reset' onClick={props.onEditProfile}/>
-          </div>
-          <p className='profile__title'>{`${userDescription}`}</p>
-        </div>
-        <button className='profile__add-button button-style__reset' onClick={props.onAddPlace}/>
-      </section>
+      <CurrentUserContext.Consumer>
+        {value =>
+          <section className='profile'>
+            <div className='profile__overlay'>
+              <img src={value.avatar}
+                   alt={`Фото: ${value.name}`}
+                   className='profile__pic'
+                   onClick={onEditAvatar}
+              />
+              <img src={avatarPointer}
+                   alt='edit-icon'
+                   className='profile__edit-icon'
+              />
+            </div>
+            <div className='profile__info'>
+              <div className='profile__wrapper'>
+                <h1 className='profile__name'>{`${value.name}`}</h1>
+                <button className='profile__edit-button button-style__reset' onClick={onEditProfile}/>
+              </div>
+              <p className='profile__title'>{`${value.description}`}</p>
+            </div>
+            <button className='profile__add-button button-style__reset' onClick={onAddPlace}/>
+          </section>
+        }
+      </CurrentUserContext.Consumer>
 
-      <section className='cards'>
-        <ul className='cards__list'>
-          {cards.map(card =>
-            <Card {...card}
-                  key={card.id}
-                  onCardClick={props.onCardClick}
-                  onRemoveClick={props.onRemoveClick}
-            />)}
-        </ul>
-      </section>
-
+      <CardsContext.Consumer>
+        {cards =>
+          <section className='cards'>
+            <ul className='cards__list'>
+              {cards.map(card =>
+                <Card {...card}
+                      key={card._id}
+                      onCardClick={onCardClick}
+                      onRemoveClickPopup={onRemoveClickPopup}
+                      onLikeClick={onLikeClick}
+                      onDeleteClick={onDeleteClick}
+                />
+              )}
+            </ul>
+          </section>
+        }
+      </CardsContext.Consumer>
     </main>
 
   );

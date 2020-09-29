@@ -31,11 +31,11 @@ class Api {
 
   setUserData(data) {
     return fetch(this._userUrl, {
-      method: 'POST',
+      method: 'PATCH',
       headers: this._headers,
       body: JSON.stringify({
         name: data.name,
-        link: data.link
+        about: data.about
       })
     }).then(res => {
       if (res.ok) {
@@ -65,6 +65,11 @@ class Api {
     return fetch(this._cardsUrl + '/' + _id, {
       method: 'DELETE',
       headers: this._headers
+    }).then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
     })
   }
 
@@ -84,7 +89,20 @@ class Api {
     return fetch(this._cardsUrl + '/likes/' + _id, {
       method: 'DELETE',
       headers: this._headers
+    }).then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
     })
+  }
+
+  changeLikeCardStatus(_id, isLiked) {
+    if (isLiked) {
+      return this.removeLike(_id)
+    } else {
+      return this.putLike(_id)
+    }
   }
 
   setNewAvatar(data) {
