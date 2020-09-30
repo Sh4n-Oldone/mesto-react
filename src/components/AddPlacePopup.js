@@ -19,7 +19,7 @@ export default function AddPlacePopup({isOpen, onClose, handleNewPlace}) {
       refInputName.current.value = '';
       refInputUrl.current.value = '';
     }
-  })
+  }, [isOpen])
 
   return (
     <PopupWithForm

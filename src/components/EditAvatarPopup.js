@@ -15,7 +15,7 @@ export default function EditAvatarPopup({isOpen, onClose, onUpdateAvatar}) {
     if (isOpen === false) {
       refInput.current.value = '';
     }
-  })
+  }, [isOpen])
 
   return (
     <PopupWithForm
