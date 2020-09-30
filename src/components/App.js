@@ -14,7 +14,7 @@ import AddPlacePopup from "./AddPlacePopup";
 
 export default function App() {
 
-  const [state, setState] = useState({
+  const [popupsState, popupsSetState] = useState({
     isEditProfilePopupOpen: false,
     isAddPlacePopupOpen: false,
     isEditAvatarPopupOpen: false,
@@ -30,26 +30,22 @@ export default function App() {
   const [cards, setCards] = useState([]);
 
   useEffect(() => {
-    myApi.getUserData()
+    Promise.all([
+      myApi.getUserData(),
+      myApi.getCardsData()
+    ])
       .then((res) => {
+        const [profileData, cardsData] = res;
         setCurrentUser({
-          name: res.name,
-          description: res.about,
-          avatar: res.avatar,
-          _id: res._id
-        })
-      }).catch((error) => {
-      console.log('Я получал данные. Я сломался. Ошибка: ' + error)
-    });
-  }, []);
-
-  useEffect(() => {
-    myApi.getCardsData()
-      .then(res => {
-        setCards(res);
+          name: profileData.name,
+          description: profileData.about,
+          avatar: profileData.avatar,
+          _id: profileData._id
+        });
+        setCards(cardsData);
       })
       .catch((error) => {
-        console.log('Я грузил данные карточек. Я сломался. Ошибка: ' + error)
+        console.log('Я получал данные о профиле и карточках. Я сломался. Ошибка: ' + error)
       })
   }, []);
 
@@ -59,6 +55,9 @@ export default function App() {
       .then((newCard) => {
         const newCards = cards.map((c) => c._id === card._id ? newCard : c);
         setCards(newCards);
+      })
+      .catch((error) => {
+        console.log('Я работал с лайком. Я сломался. Ошибка: ' + error)
       });
   }
 
@@ -67,6 +66,9 @@ export default function App() {
       .then(() => {
         const newCards = cards.filter(item => card._id !== item._id);
         setCards(newCards);
+      })
+      .catch((error) => {
+        console.log('Я удалял карточку. Я сломался. Ошибка: ' + error)
       });
   }
 
@@ -80,7 +82,10 @@ export default function App() {
           _id: res._id
         })
       })
-      .then(closeAllPopups())
+      .catch((error) => {
+        console.log('Я менял данные пользователя. Я сломался. Ошибка: ' + error)
+      })
+      .then(() => {closeAllPopups()});
   }
 
   function handleUpdateAvatar(data) {
@@ -93,7 +98,10 @@ export default function App() {
           _id: currentUser._id
         })
       })
-      .then(closeAllPopups())
+      .catch((error) => {
+        console.log('Я отправлял новый аватар. Я сломался. Ошибка: ' + error)
+      })
+      .then(() => {closeAllPopups()});
   }
 
   function handleAddPlaceSubmit(data) {
@@ -101,7 +109,10 @@ export default function App() {
       .then((newCard) => {
         setCards([newCard, ...cards]);
       })
-      .then(closeAllPopups())
+      .catch((error) => {
+        console.log('Я добавлял новую карточку. Я сломался. Ошибка: ' + error)
+      })
+      .then(() => {closeAllPopups()});
   }
 
   function handleCardClick(card) {
@@ -109,25 +120,24 @@ export default function App() {
   }
 
   function handleEditProfileClick() {
-    setState({...state, isEditProfilePopupOpen: !state.isEditProfilePopupOpen})
+    popupsSetState({...popupsState, isEditProfilePopupOpen: !popupsState.isEditProfilePopupOpen})
   }
 
   function handleAddPlaceClick() {
-    setState({...state, isAddPlacePopupOpen: !state.isAddPlacePopupOpen})
+    popupsSetState({...popupsState, isAddPlacePopupOpen: !popupsState.isAddPlacePopupOpen})
   }
 
   function handleEditAvatarClick() {
-    setState({...state, isEditAvatarPopupOpen: !state.isEditAvatarPopupOpen})
+    popupsSetState({...popupsState, isEditAvatarPopupOpen: !popupsState.isEditAvatarPopupOpen})
   }
 
   function handleRemoveCardClickPopupOpen() {
-    setState({...state, isRemoveCardPopupOpen: !state.isRemoveCardPopupOpen})
+    popupsSetState({...popupsState, isRemoveCardPopupOpen: !popupsState.isRemoveCardPopupOpen})
   }
 
   function closeAllPopups() {
-    document.querySelector('.popup_opened').classList.remove('popup_opened');
-    setState({
-      ...state, isEditProfilePopupOpen: false,
+    popupsSetState({
+      ...popupsState, isEditProfilePopupOpen: false,
       isAddPlacePopupOpen: false,
       isEditAvatarPopupOpen: false,
       isRemoveCardPopupOpen: false
@@ -156,34 +166,19 @@ export default function App() {
               />
 
               <EditProfilePopup
-                isOpen={state.isEditProfilePopupOpen}
+                isOpen={popupsState.isEditProfilePopupOpen}
                 onClose={closeAllPopups}
                 onUpdateUser={handleUpdateUser}
               />
 
               <EditAvatarPopup
-                isOpen={state.isEditAvatarPopupOpen}
+                isOpen={popupsState.isEditAvatarPopupOpen}
                 onClose={closeAllPopups}
                 onUpdateAvatar={handleUpdateAvatar}
               />
 
-              {/*<PopupWithForm*/}
-              {/*  name={'card'}*/}
-              {/*  title={'Новое место'}*/}
-              {/*  isOpen={state.isAddPlacePopupOpen}*/}
-              {/*  onClose={closeAllPopups}*/}
-              {/*>*/}
-              {/*  <small className='popup__input_type_error input_name_error-message'/>*/}
-              {/*  <input type='text' name='name' defaultValue={''} placeholder='Название'*/}
-              {/*         className='popup__input popup__input_name'*/}
-              {/*         minLength='1' maxLength='30' required/>*/}
-              {/*  <small className='popup__input_type_error input_title_error-message'/>*/}
-              {/*  <input type='url' name='link' defaultValue={''} placeholder='Ссылка на карточку'*/}
-              {/*         className='popup__input popup__input_title' required/>*/}
-              {/*</PopupWithForm>*/}
-
               <AddPlacePopup
-                isOpen={state.isAddPlacePopupOpen}
+                isOpen={popupsState.isAddPlacePopupOpen}
                 onClose={closeAllPopups}
                 handleNewPlace={handleAddPlaceSubmit}
               />
@@ -191,7 +186,7 @@ export default function App() {
               <PopupWithForm
                 name={'submit'}
                 title={'Вы уверены?'}
-                isOpen={state.isRemoveCardPopupOpen}
+                isOpen={popupsState.isRemoveCardPopupOpen}
                 onClose={closeAllPopups}
               />
 

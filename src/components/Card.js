@@ -4,9 +4,7 @@ import {owner} from "../utils/utils";
 const Card = (card) => {
 
   function handleClick() {
-    const url = card.link;
-    const description = card.name;
-    card.onCardClick({url, description});
+    card.onCardClick({url: card.link, description: card.name});
   }
 
   return (

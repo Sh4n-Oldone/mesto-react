@@ -2,16 +2,10 @@ import React from 'react';
 
 export default function ImagePopup({card, name, onClose}) {
 
-  function isOpen() {
-    if (card) {
-      return ' popup_opened'
-    } else {
-      return ''
-    }
-  }
-
   return (
-    <section className={`popup popup-${name}${isOpen()}`}>
+    <section className={`popup popup-${name}${
+      card ? ' popup_opened' : ''
+    }`}>
       <div className='popup-image__container'>
         <img src={card.url} alt={card.description} className='popup-image__image'/>
         <p className='popup-image__title'>{card.description}</p>
