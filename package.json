@@ -7,7 +7,7 @@
     "type": "git",
     "url": "git+https://Sh4n-Oldone.github.io/mesto-react.git"
   },
-  "homepage": "https://Sh4n-Oldone.github.io/mesto-react/index.html",
+  "homepage": "https://Sh4n-Oldone.github.io/mesto-react/",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
